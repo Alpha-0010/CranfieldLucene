@@ -43,7 +43,7 @@ public class RerankTitleBoostSearcher {
         DirectoryReader reader = DirectoryReader.open(dir);
         IndexSearcher searcher = new IndexSearcher(reader);
 
-        // ✅ Use same field used in baseline Searcher ("all" in your case)
+        // Use same field used in baseline Searcher ("all" in your case)
         QueryParser bodyParser = new QueryParser("content", analyzer);
         QueryParser titleParser = new QueryParser("title", analyzer);
 
@@ -56,11 +56,11 @@ public class RerankTitleBoostSearcher {
                 String qtext = e.getValue();
                 if (qtext == null || qtext.isEmpty()) continue;
 
-                // STEP 1 — Rocchio expansion
+                // Rocchio expansion
                 String expandedQuery = RocchioUtils.expandQuery(searcher, analyzer, "all",
                         qtext, alpha, beta, fbDocs, expTerms);
 
-                // STEP 2 — Base retrieval on expanded query
+                // Base retrieval on expanded query
                 Query baseQ = bodyParser.parse(QueryParser.escape(expandedQuery));
                 TopDocs top = searcher.search(baseQ, topN);
 
@@ -72,7 +72,7 @@ public class RerankTitleBoostSearcher {
 
                 System.out.println("Query " + qid + " got " + top.scoreDocs.length + " docs for reranking.");
 
-                // STEP 3 — Build title query for reranking
+                // Build title query for reranking
                 Query titleQ = titleParser.parse(QueryParser.escape(qtext));
 
                 // STEP 4 — Rerank based on title match
@@ -85,10 +85,10 @@ public class RerankTitleBoostSearcher {
                     reranked[i] = new ScoreDoc(sd.doc, newScore);
                 }
 
-                // STEP 5 — Sort by newScore descending
+                // Sort by newScore descending
                 reranked = sortScoreDocs(reranked);
 
-                // STEP 6 — Write to TREC format file
+                // Write to TREC format file
                 for (int rank = 0; rank < reranked.length; rank++) {
                     Document doc = searcher.doc(reranked[rank].doc);
                     String docno = doc.get("id");

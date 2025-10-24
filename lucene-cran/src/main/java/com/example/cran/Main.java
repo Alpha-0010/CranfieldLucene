@@ -19,94 +19,94 @@ public class Main {
         String outputFileNGram = "target/cran_results_ngram.txt";
         String outputFileSynonym = "target/cran_results_synonym.txt";
 
-        // 🏗️ Step 1: Indexing
+        // Indexing
         CranfieldParser parser = new CranfieldParser(Paths.get("src/main/resources/cran").toFile());
         List<CranfieldParser.CranDoc> docs = parser.parseDocs();
         Indexer indexer = new Indexer(indexPath);
         indexer.index(docs);
-        System.out.println("✅ Indexing completed. Index stored at: " + indexPath);
-
-        // // -----------------------------------------------------------
-        // // 🔹 Step 2: Baseline - EnglishAnalyzer
-        // // -----------------------------------------------------------
-        // Searcher baselineSearcher = new Searcher(indexPath);
-        // baselineSearcher.search(queriesFile, outputFileEnglish, "english");
-        // System.out.println("\n🔸 Evaluating Baseline English Analyzer...");
-        // runTrecEval(qrelsFile, outputFileEnglish, resultsDir, "english");
-
-        // // -----------------------------------------------------------
-        // // 🔹 Step 3: N-Gram Analyzer
-        // // -----------------------------------------------------------
-        // NGramSearcher ngramSearcher = new NGramSearcher(indexPath);
-        // ngramSearcher.search(queriesFile, outputFileNGram);
-        // System.out.println("\n🔸 Evaluating N-Gram Analyzer...");
-        // runTrecEval(qrelsFile, outputFileNGram, resultsDir, "ngram");
-
-        // // -----------------------------------------------------------
-        // // 🔹 Step 4: Synonym Analyzer
-        // // -----------------------------------------------------------
-        // SynonymSearcher synonymSearcher = new SynonymSearcher(indexPath);
-        // synonymSearcher.search(queriesFile, outputFileSynonym);
-        // System.out.println("\n🔸 Evaluating Synonym Analyzer...");
-        // runTrecEval(qrelsFile, outputFileSynonym, resultsDir, "synonym");
-
-        // // -----------------------------------------------------------
-        // // 🔹 Step 5: BM25 Parameter Tuning
-        // // -----------------------------------------------------------
-        // float[] k1Values = {0.8f, 1.2f, 1.5f, 2.0f};
-        // float[] bValues = {0.4f, 0.6f, 0.75f};
-
-        // for (float k1 : k1Values) {
-        //     for (float b : bValues) {
-        //         String outputFileBM25 = "target/cran_results_bm25_" + k1 + "_" + b + ".txt";
-        //         BM25TunedSearcher tunedSearcher = new BM25TunedSearcher(indexPath, k1, b);
-        //         tunedSearcher.search(queriesFile, outputFileBM25);
-        //         System.out.println("\n🔸 Evaluating BM25 tuned (k1=" + k1 + ", b=" + b + ")...");
-        //         runTrecEval(qrelsFile, outputFileBM25, resultsDir, "bm25_" + k1 + "_" + b);
-        //     }
-        // }
-
-        // // -----------------------------------------------------------
-        // // 🔹 Step 6: Field Boosting (Title vs Body)
-        // // -----------------------------------------------------------
-        // float[] titleBoosts = {1.5f, 2.0f, 3.0f};
-        // float[] bodyBoosts = {1.0f};
-
-        // for (float tBoost : titleBoosts) {
-        //     for (float bBoost : bodyBoosts) {
-        //         String outputFileBoost = "target/cran_results_boost_t" + tBoost + "_b" + bBoost + ".txt";
-        //         BoostedFieldSearcher boostedSearcher = new BoostedFieldSearcher(indexPath, tBoost, bBoost);
-        //         boostedSearcher.search(queriesFile, outputFileBoost);
-        //         System.out.println("\n🔸 Evaluating Field Boosting (title=" + tBoost + ", body=" + bBoost + ")...");
-        //         runTrecEval(qrelsFile, outputFileBoost, resultsDir, "boost_t" + tBoost + "_b" + bBoost);
-        //     }
-        // }
-
-        // // -----------------------------------------------------------
-        // // 🔹 Step 7: Rocchio PRF (Pseudo Relevance Feedback)
-        // // -----------------------------------------------------------
-        // float[] alphas = {1.0f};
-        // float[] betas  = {0.5f, 0.75f};
-        // int[] fbDocs   = {5, 10};
-        // int[] expTerms = {10, 15};
-
-        // for (float a : alphas) {
-        //     for (float b : betas) {
-        //         for (int d : fbDocs) {
-        //             for (int t : expTerms) {
-        //                 String tag = "rocchio_a" + a + "_b" + b + "_d" + d + "_t" + t;
-        //                 String out = "target/cran_results_" + tag + ".txt";
-        //                 RocchioSearcher roc = new RocchioSearcher(indexPath, a, b, d, t);
-        //                 roc.search(queriesFile, out);
-        //                 System.out.println("\n🔸 Evaluating Rocchio (" + tag + ")...");
-        //                 runTrecEval(qrelsFile, out, resultsDir, tag);
-        //             }
-        //         }
-        //     }
-        // }
+        System.out.println(" Indexing completed. Index stored at: " + indexPath);
 
         // -----------------------------------------------------------
-        // 🔹 Step 8: Title-based Reranking (P@5 Optimizer 🚀)
+        // Baseline - EnglishAnalyzer
+        // -----------------------------------------------------------
+        Searcher baselineSearcher = new Searcher(indexPath);
+        baselineSearcher.search(queriesFile, outputFileEnglish, "english"); // english, standard, whitespace.
+        System.out.println("\n🔸 Evaluating Baseline English Analyzer...");
+        runTrecEval(qrelsFile, outputFileEnglish, resultsDir, "english");
+
+        // -----------------------------------------------------------
+        // N-Gram Analyzer
+        // -----------------------------------------------------------
+        NGramSearcher ngramSearcher = new NGramSearcher(indexPath);
+        ngramSearcher.search(queriesFile, outputFileNGram);
+        System.out.println("\n🔸 Evaluating N-Gram Analyzer...");
+        runTrecEval(qrelsFile, outputFileNGram, resultsDir, "ngram");
+
+        // -----------------------------------------------------------
+        // Synonym Analyzer
+        // -----------------------------------------------------------
+        SynonymSearcher synonymSearcher = new SynonymSearcher(indexPath);
+        synonymSearcher.search(queriesFile, outputFileSynonym);
+        System.out.println("\n🔸 Evaluating Synonym Analyzer...");
+        runTrecEval(qrelsFile, outputFileSynonym, resultsDir, "synonym");
+
+        // -----------------------------------------------------------
+        // BM25 Parameter Tuning
+        // -----------------------------------------------------------
+        float[] k1Values = {0.8f, 1.2f, 1.5f, 2.0f};
+        float[] bValues = {0.4f, 0.6f, 0.75f};
+
+        for (float k1 : k1Values) {
+            for (float b : bValues) {
+                String outputFileBM25 = "target/cran_results_bm25_" + k1 + "_" + b + ".txt";
+                BM25TunedSearcher tunedSearcher = new BM25TunedSearcher(indexPath, k1, b);
+                tunedSearcher.search(queriesFile, outputFileBM25);
+                System.out.println("\n🔸 Evaluating BM25 tuned (k1=" + k1 + ", b=" + b + ")...");
+                runTrecEval(qrelsFile, outputFileBM25, resultsDir, "bm25_" + k1 + "_" + b);
+            }
+        }
+
+        // -----------------------------------------------------------
+        // Field Boosting (Title vs Body)
+        // -----------------------------------------------------------
+        float[] titleBoosts = {1.5f, 2.0f, 3.0f};
+        float[] bodyBoosts = {1.0f};
+
+        for (float tBoost : titleBoosts) {
+            for (float bBoost : bodyBoosts) {
+                String outputFileBoost = "target/cran_results_boost_t" + tBoost + "_b" + bBoost + ".txt";
+                BoostedFieldSearcher boostedSearcher = new BoostedFieldSearcher(indexPath, tBoost, bBoost);
+                boostedSearcher.search(queriesFile, outputFileBoost);
+                System.out.println("\n🔸 Evaluating Field Boosting (title=" + tBoost + ", body=" + bBoost + ")...");
+                runTrecEval(qrelsFile, outputFileBoost, resultsDir, "boost_t" + tBoost + "_b" + bBoost);
+            }
+        }
+
+        // -----------------------------------------------------------
+        // Rocchio PRF (Pseudo Relevance Feedback)
+        // -----------------------------------------------------------
+        float[] alphas = {1.0f};
+        float[] betas  = {0.5f, 0.75f};
+        int[] fbDocs   = {5, 10};
+        int[] expTerms = {10, 15};
+
+        for (float a : alphas) {
+            for (float b : betas) {
+                for (int d : fbDocs) {
+                    for (int t : expTerms) {
+                        String tag = "rocchio_a" + a + "_b" + b + "_d" + d + "_t" + t;
+                        String out = "target/cran_results_" + tag + ".txt";
+                        RocchioSearcher roc = new RocchioSearcher(indexPath, a, b, d, t);
+                        roc.search(queriesFile, out);
+                        System.out.println("\n🔸 Evaluating Rocchio (" + tag + ")...");
+                        runTrecEval(qrelsFile, out, resultsDir, tag);
+                    }
+                }
+            }
+        }
+
+        // -----------------------------------------------------------
+        // Title-based Reranking
         // -----------------------------------------------------------
         float[] rerankBoosts = {0.5f, 1.0f, 2.0f};
         int[] rerankTops = {50, 100};
@@ -121,7 +121,7 @@ public class Main {
             }
         }
 
-        System.out.println("\n✅ All evaluations completed. Results saved in: " + resultsDir);
+        System.out.println("\nAll evaluations completed. Results saved in: " + resultsDir);
     }
 
     /**
@@ -160,8 +160,8 @@ public class Main {
 
         int exitCode = p.waitFor();
         if (exitCode == 0)
-            System.out.println("✅ Metrics saved to " + metricsFile);
+            System.out.println("Metrics saved to " + metricsFile);
         else
-            System.err.println("❌ trec_eval failed for " + tag);
+            System.err.println("trec_eval failed for " + tag);
     }
 }
