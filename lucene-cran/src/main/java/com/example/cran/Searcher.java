@@ -41,6 +41,7 @@ public class Searcher {
         // Parse queries from Cranfield .qry file
         Map<Integer, String> queries = parseCranQueries(queriesFile);
         QueryParser parser = new QueryParser("content", analyzer);
+        parser.setDefaultOperator(QueryParser.Operator.OR);
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile))) {
             for (Map.Entry<Integer, String> e : queries.entrySet()) {
@@ -49,7 +50,7 @@ public class Searcher {
                 if (qtext == null || qtext.isEmpty()) continue;
 
                 Query q = parser.parse(QueryParser.escape(qtext));
-                TopDocs top = searcher.search(q, 50);
+                TopDocs top = searcher.search(q, 1000);
                 ScoreDoc[] hits = top.scoreDocs;
 
                 for (int i = 0; i < hits.length; i++) {
@@ -61,6 +62,7 @@ public class Searcher {
                     bw.write(qid + " Q0 " + docno + " " + rank + " " + score + " run_" + analyzerName + "\n");
                 }
             }
+            bw.flush();
         }
 
         reader.close();
