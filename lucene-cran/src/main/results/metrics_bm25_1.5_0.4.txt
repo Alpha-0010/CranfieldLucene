@@ -1,0 +1,4 @@
+map                   	all	0.3143
+gm_map                	all	0.2205
+P_5                   	all	0.3796
+recall_1000           	all	0.9559

@@ -1,4 +1,13 @@
+/workspaces/CranfieldLucene/lucene-cran/src/main/java/com/example/cran/BM25TunedSearcher.java
+/workspaces/CranfieldLucene/lucene-cran/src/main/java/com/example/cran/BoostedFieldSearcher.java
 /workspaces/CranfieldLucene/lucene-cran/src/main/java/com/example/cran/CranfieldParser.java
+/workspaces/CranfieldLucene/lucene-cran/src/main/java/com/example/cran/CustomAnalyzer.java
 /workspaces/CranfieldLucene/lucene-cran/src/main/java/com/example/cran/Indexer.java
 /workspaces/CranfieldLucene/lucene-cran/src/main/java/com/example/cran/Main.java
+/workspaces/CranfieldLucene/lucene-cran/src/main/java/com/example/cran/NGramSearcher.java
+/workspaces/CranfieldLucene/lucene-cran/src/main/java/com/example/cran/RerankTitleBoostSearcher.java
+/workspaces/CranfieldLucene/lucene-cran/src/main/java/com/example/cran/RocchioSearcher.java
+/workspaces/CranfieldLucene/lucene-cran/src/main/java/com/example/cran/RocchioUtils.java
 /workspaces/CranfieldLucene/lucene-cran/src/main/java/com/example/cran/Searcher.java
+/workspaces/CranfieldLucene/lucene-cran/src/main/java/com/example/cran/SynonymAnalyzer.java
+/workspaces/CranfieldLucene/lucene-cran/src/main/java/com/example/cran/SynonymSearcher.java
